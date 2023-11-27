@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  if user
+    h2 Bienvenido, #{user.username}!
+
+    // Formulario para enviar un nuevo tweet
+    form(action="/tweets", method="POST")
+      textarea(name="content", placeholder="¿Qué estás pensando?", required)
+      button(type="submit") Publicar Tweet
+
+    // Lista de tweets
+    if tweets.length > 0
+      ul
+        each tweet in tweets
+          li
+            p #{tweet.content}
+            p Publicado por: #{tweet.user.username}
+
+            // Formulario para agregar comentarios a un tweet
+            form(action="/tweets/comment", method="POST")
+              input(type="hidden", name="tweetId", value=tweet._id)
+              textarea(name="content", placeholder="Añadir comentario", required)
+              button(type="submit") Comentar
+    else
+      p No hay tweets aún.
+  else
+    p Por favor, inicia sesión para ver y publicar tweets.
